@@ -1,0 +1,122 @@
+{
+    "Man United": {
+        "rank": 6,
+        "attack": 1.2,
+        "defense": 1.6,
+        "form": 0.8
+    },
+    "West Ham": {
+        "rank": 15,
+        "attack": 1.8,
+        "defense": 1.4,
+        "form": 1.4
+    },
+    "Nott'm Forest": {
+        "rank": 14,
+        "attack": 1.0,
+        "defense": 1.4,
+        "form": 1.0
+    },
+    "Newcastle": {
+        "rank": 4,
+        "attack": 1.2,
+        "defense": 0.6,
+        "form": 1.4
+    },
+    "Arsenal": {
+        "rank": 2,
+        "attack": 1.6,
+        "defense": 1.4,
+        "form": 1.6
+    },
+    "Ipswich": {
+        "rank": 23,
+        "attack": 0.6,
+        "defense": 2.2,
+        "form": 0.2
+    },
+    "Everton": {
+        "rank": 16,
+        "attack": 1.6,
+        "defense": 0.8,
+        "form": 2.0
+    },
+    "Chelsea": {
+        "rank": 7,
+        "attack": 1.2,
+        "defense": 0.6,
+        "form": 2.4
+    },
+    "Brentford": {
+        "rank": 11,
+        "attack": 2.0,
+        "defense": 1.4,
+        "form": 2.0
+    },
+    "Leicester": {
+        "rank": 18,
+        "attack": 1.2,
+        "defense": 1.4,
+        "form": 1.4
+    },
+    "Crystal Palace": {
+        "rank": 12,
+        "attack": 2.0,
+        "defense": 1.2,
+        "form": 1.8
+    },
+    "Southampton": {
+        "rank": 19,
+        "attack": 0.4,
+        "defense": 1.6,
+        "form": 0.2
+    },
+    "Man City": {
+        "rank": 1,
+        "attack": 1.6,
+        "defense": 0.4,
+        "form": 2.6
+    },
+    "Fulham": {
+        "rank": 10,
+        "attack": 1.2,
+        "defense": 1.8,
+        "form": 1.2
+    },
+    "Brighton": {
+        "rank": 8,
+        "attack": 2.6,
+        "defense": 1.2,
+        "form": 2.6
+    },
+    "Tottenham": {
+        "rank": 9,
+        "attack": 0.6,
+        "defense": 2.8,
+        "form": 0.2
+    },
+    "Aston Villa": {
+        "rank": 5,
+        "attack": 1.0,
+        "defense": 0.8,
+        "form": 1.8
+    },
+    "Bournemouth": {
+        "rank": 13,
+        "attack": 1.2,
+        "defense": 1.2,
+        "form": 1.4
+    },
+    "Liverpool": {
+        "rank": 3,
+        "attack": 2.2,
+        "defense": 2.0,
+        "form": 1.0
+    },
+    "Wolves": {
+        "rank": 17,
+        "attack": 1.2,
+        "defense": 1.6,
+        "form": 0.8
+    }
+}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div class="bg-slate-950 p-8 rounded-2xl border border-slate-800">
+        <h1 class="text-3xl font-bold text-white mb-6">Contact Support</h1>
+        <p class="text-slate-400 mb-8">Have a question about the model or your subscription? Send us a message.</p>
+
+        <form class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-400 mb-2">Name</label>
+                <input type="text" class="w-full bg-slate-900 text-white border border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-brand-accent outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-400 mb-2">Email</label>
+                <input type="email" class="w-full bg-slate-900 text-white border border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-brand-accent outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-400 mb-2">Message</label>
+                <textarea rows="4" class="w-full bg-slate-900 text-white border border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-brand-accent outline-none"></textarea>
+            </div>
+            <button type="button" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-xl transition">
+                Send Message
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

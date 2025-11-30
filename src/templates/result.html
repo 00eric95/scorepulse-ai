@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Match Result{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- HEADER -->
+    <div class="text-center mb-10">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Prediction Result</h1>
+        <p class="text-gray-500 dark:text-slate-400 mt-2">{{ message }}</p>
+    </div>
+
+    <!-- SCOREBOARD CARD -->
+    <div class="bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-950 p-8 md:p-12 rounded-3xl border border-gray-200 dark:border-slate-800 shadow-2xl relative overflow-hidden">
+        
+        <!-- Blur Overlay for Free Users (if score is hidden) -->
+        {% if not is_pro and pred_home == "?" %}
+        <div class="absolute inset-0 z-10 backdrop-blur-sm bg-white/10 dark:bg-slate-900/30 flex flex-col items-center justify-center p-6 text-center">
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 max-w-sm">
+                <span class="text-4xl mb-4 block">🔒</span>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Pro Feature Locked</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-6">Upgrade to ScorePulse Pro to see the exact predicted score and detailed analysis.</p>
+                <a href="/pricing" class="block w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 dark:bg-brand-accent dark:hover:bg-sky-400 text-white dark:text-slate-900 font-bold rounded-lg transition">
+                    Unlock Prediction
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-3 items-center mb-10">
+            <!-- Home Team -->
+            <div class="text-center flex flex-col items-center">
+                <div class="w-24 h-24 md:w-32 md:h-32 p-4 bg-gray-50 dark:bg-slate-800 rounded-full shadow-inner mb-4 flex items-center justify-center">
+                    {% if home_logo %}
+                        <img src="{{ home_logo }}" alt="{{ home_team }}" class="max-w-full max-h-full object-contain">
+                    {% else %}
+                        <span class="text-4xl">🏠</span>
+                    {% endif %}
+                </div>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{{ home_team }}</h2>
+                <span class="text-xs font-bold uppercase text-gray-500 mt-1">Home</span>
+            </div>
+
+            <!-- Score -->
+            <div class="text-center">
+                <div class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-brand-accent dark:to-purple-500 tracking-tight">
+                    {{ pred_home }} - {{ pred_away }}
+                </div>
+                <div class="mt-4 inline-block px-3 py-1 bg-blue-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-full uppercase tracking-wider">
+                    AI Confidence: 82%
+                </div>
+            </div>
+
+            <!-- Away Team -->
+            <div class="text-center flex flex-col items-center">
+                <div class="w-24 h-24 md:w-32 md:h-32 p-4 bg-gray-50 dark:bg-slate-800 rounded-full shadow-inner mb-4 flex items-center justify-center">
+                    {% if away_logo %}
+                        <img src="{{ away_logo }}" alt="{{ away_team }}" class="max-w-full max-h-full object-contain">
+                    {% else %}
+                        <span class="text-4xl">✈️</span>
+                    {% endif %}
+                </div>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{{ away_team }}</h2>
+                <span class="text-xs font-bold uppercase text-gray-500 mt-1">Away</span>
+            </div>
+        </div>
+
+        <!-- Stats Grid (Only visible if Pro or mock) -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-200 dark:border-slate-800 pt-8">
+            <div class="text-center">
+                <p class="text-xs text-gray-500 uppercase font-bold mb-1">Possession</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white">52% - 48%</p>
+            </div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 uppercase font-bold mb-1">xG</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white">1.45 - 1.12</p>
+            </div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 uppercase font-bold mb-1">Form</p>
+                <div class="flex justify-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                </div>
+            </div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 uppercase font-bold mb-1">H2H</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white">+2 Wins</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-8 flex justify-center gap-4">
+        <a href="/upcoming" class="px-6 py-3 bg-gray-200 dark:bg-slate-800 hover:bg-gray-300 dark:hover:bg-slate-700 text-gray-900 dark:text-white font-bold rounded-xl transition flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Analyze Another
+        </a>
+        {% if not is_pro %}
+        <a href="/pricing" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition shadow-lg shadow-blue-500/30">
+            Unlock Full Stats
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

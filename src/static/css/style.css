@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- CUSTOM ANIMATIONS --- */
+
+/* Floating Blob Animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Scroll Reveal Effects */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Text Gradients */
+.text-gradient {
+    background: linear-gradient(to right, #3b82f6, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* --- HERO SECTION STYLES --- */
+
+/* 1. The Container with the Image */
+.hero-section {
+    position: relative;
+    /* This path assumes you saved the image at src/static/img/hero_bg.png */
+    background-image: url('/static/img/hero_bg.png'); 
+    background-size: cover;        /* Ensure image covers the whole area */
+    background-position: center top; /* Focus on the players' heads/torsos */
+    background-repeat: no-repeat;
+    background-color: #111827;     /* Fallback dark color if image fails to load */
+}
+
+/* 2. The Dark Overlay (Cinematic Effect) */
+/* This sits on top of the image but behind the text to make text readable */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom, 
+        rgba(17, 24, 39, 0.80) 0%,   /* Darker at top */
+        rgba(17, 24, 39, 0.50) 50%,  /* Lighter in middle to see players */
+        rgba(17, 24, 39, 1.00) 100%  /* Solid dark at bottom to blend with next section */
+    );
+    z-index: 1;
+}
+
+/* 3. The Text Content Wrapper */
+/* Ensures buttons and text are clickable and above the overlay */
+.hero-content {
+    position: relative;
+    z-index: 10;
+}

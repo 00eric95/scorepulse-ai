@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl w-full space-y-8 reveal active">
+        
+        <div class="text-center">
+            <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">Match Simulator</h2>
+            <p class="mt-2 text-lg text-gray-500 dark:text-gray-400">Select teams to predict.</p>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+            <form action="/predict" method="post" onsubmit="showLoader()">
+                <div class="p-8 md:p-12">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-8 relative">
+
+                        <!-- HOME TEAM -->
+                        <div class="flex-1 w-full text-center group">
+                            <div class="w-32 h-32 mx-auto flex items-center justify-center mb-4 p-4 bg-white rounded-full shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div id="home_default_icon" class="text-6xl absolute inset-0 flex items-center justify-center">🏠</div>
+                                <img id="home_logo_img" class="hidden max-w-full max-h-full object-contain z-10 transition-transform duration-300 group-hover:scale-110" alt="Home Logo">
+                            </div>
+                            
+                            <label class="block text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Home Team</label>
+                            <div class="relative">
+                                <select id="home_team" name="home_team" required onchange="updateLogo('home');"
+                                    class="block w-full pl-4 pr-10 py-3 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-lg rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white appearance-none shadow-sm cursor-pointer">
+                                    <option value="" disabled {% if not selected_home %}selected{% endif %}>Select Team...</option>
+                                    {% for team in teams %}
+                                    <option value="{{ team.name }}" {% if team.name == selected_home %}selected{% endif %}>{{ team.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- VS -->
+                        <div class="z-10 flex-shrink-0">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-green-500 flex items-center justify-center text-white font-black text-xl shadow-lg border-4 border-white dark:border-gray-800">VS</div>
+                        </div>
+
+                        <!-- AWAY TEAM -->
+                        <div class="flex-1 w-full text-center group">
+                            <div class="w-32 h-32 mx-auto flex items-center justify-center mb-4 p-4 bg-white rounded-full shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div id="away_default_icon" class="text-6xl absolute inset-0 flex items-center justify-center">✈️</div>
+                                <img id="away_logo_img" class="hidden max-w-full max-h-full object-contain z-10 transition-transform duration-300 group-hover:scale-110" alt="Away Logo">
+                            </div>
+
+                            <label class="block text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Away Team</label>
+                            <div class="relative">
+                                <select id="away_team" name="away_team" required onchange="updateLogo('away');"
+                                    class="block w-full pl-4 pr-10 py-3 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-lg rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white appearance-none shadow-sm cursor-pointer">
+                                    <option value="" disabled {% if not selected_away %}selected{% endif %}>Select Team...</option>
+                                    {% for team in teams %}
+                                    <option value="{{ team.name }}" {% if team.name == selected_away %}selected{% endif %}>{{ team.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 dark:bg-gray-900 px-8 py-6 text-center border-t border-gray-200 dark:border-gray-700">
+                    <button type="submit" id="analyzeBtn" class="w-full md:w-auto inline-flex items-center justify-center px-10 py-4 border border-transparent text-lg font-bold rounded-lg text-white bg-gray-900 dark:bg-white dark:text-gray-900 hover:opacity-90 transition-all shadow-lg transform hover:-translate-y-1">
+                        <span id="btnText">Analyze Matchup</span>
+                        <svg id="btnLoader" class="hidden animate-spin ml-3 h-5 w-5 text-white dark:text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const teamLogos = {
+        {% for team in teams %}
+        "{{ team.name }}": "{{ team.logo }}",
+        {% endfor %}
+    };
+
+    function updateLogo(side) {
+        const select = document.getElementById(side + '_team');
+        const img = document.getElementById(side + '_logo_img');
+        const defaultIcon = document.getElementById(side + '_default_icon');
+        const teamName = select.value;
+        
+        if (teamLogos[teamName]) {
+            img.src = teamLogos[teamName];
+            img.classList.remove('hidden');
+            defaultIcon.classList.add('hidden'); 
+        }
+    }
+
+    function showLoader() {
+        const btn = document.getElementById('analyzeBtn');
+        const text = document.getElementById('btnText');
+        const loader = document.getElementById('btnLoader');
+        btn.disabled = true;
+        btn.classList.add('opacity-75', 'cursor-not-allowed');
+        text.innerText = "Processing...";
+        loader.classList.remove('hidden');
+    }
+
+    // Auto-update logos on page load if pre-selected
+    window.addEventListener('load', () => {
+        if (document.getElementById('home_team').value) updateLogo('home');
+        if (document.getElementById('away_team').value) updateLogo('away');
+    });
+</script>
+{% endblock %}

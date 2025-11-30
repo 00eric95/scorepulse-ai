@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero-section min-h-screen flex items-center justify-center pt-20 pb-32 overflow-hidden">
+    <div class="hero-overlay"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center hero-content">
+        <div class="inline-block mb-6 px-4 py-1.5 rounded-full bg-blue-600/20 border border-blue-500/50 backdrop-blur-md">
+            <span class="text-blue-300 text-sm font-semibold tracking-wide uppercase">🚀 AI-Powered Football Analytics</span>
+        </div>
+        <h1 class="text-5xl md:text-8xl font-extrabold text-white mb-6 tracking-tight drop-shadow-2xl">
+            Predict the <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400" id="typewriter"></span><span class="animate-pulse text-white">|</span>
+        </h1>
+        <p class="mt-6 max-w-2xl mx-auto text-xl md:text-2xl text-gray-300 mb-10 font-light leading-relaxed drop-shadow-md">
+            Join thousands of fans using ScorePulse AI to analyze matches with precision. Featuring data from the world's top leagues.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="/predict" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold rounded-full shadow-lg hover:shadow-blue-500/50 transition transform hover:-translate-y-1">Start Predicting</a>
+            <a href="#live-matches" class="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white text-lg font-bold rounded-full hover:bg-white/20 transition">Upcoming Matches</a>
+        </div>
+    </div>
+</section>
+
+<!-- UPCOMING MATCHES SECTION (CLICKABLE) -->
+<section id="live-matches" class="py-12 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">🚀 Upcoming Matches</h2>
+            <p class="text-gray-500 text-sm">Select a match to predict instantly</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {% if matches %}
+                {% for match in matches %}
+                <!-- Match Card is now a LINK -->
+                <a href="/predict?home={{ match.home }}&away={{ match.away }}" class="block group">
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600 flex flex-col items-center transform group-hover:scale-105 group-hover:border-blue-500 transition duration-300 h-full">
+                        <div class="text-xs font-bold text-blue-600 mb-2">{{ match.date }} • {{ match.time }}</div>
+                        
+                        <div class="flex items-center justify-between w-full mb-3 px-2">
+                            <span class="font-bold text-gray-900 dark:text-white text-sm text-right w-1/2 pr-2 truncate">{{ match.home }}</span>
+                            <div class="flex flex-col items-center">
+                                <span class="text-gray-400 text-xs font-bold">VS</span>
+                            </div>
+                            <span class="font-bold text-gray-900 dark:text-white text-sm text-left w-1/2 pl-2 truncate">{{ match.away }}</span>
+                        </div>
+                        
+                        <div class="text-xs text-gray-500 mb-3 truncate">{{ match.venue }}</div>
+                        
+                        <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-full font-bold group-hover:bg-blue-600 group-hover:text-white transition">
+                            Analyze Now
+                        </span>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="col-span-4 text-center py-10">
+                    <p class="text-gray-500 italic">No upcoming matches loaded.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES SECTION (Unchanged) -->
+<section id="features" class="py-24 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Why Trust ScorePulse?</h2>
+            <p class="mt-4 text-gray-500">Our engine uses three distinct layers of analysis.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 dark:border-gray-700">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">📊</div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Historical Data</h3>
+                <p class="text-gray-500">We analyze the last 5 years of match history, taking into account head-to-head records.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 dark:border-gray-700">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">🔥</div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Current Form</h3>
+                <p class="text-gray-500">The "Hot/Cold" engine weights recent performance heavily.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 dark:border-gray-700">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">🏠</div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Home Advantage</h3>
+                <p class="text-gray-500">Our algorithm calculates the specific "Home Bias" for every team.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const words = ["Unpredictable", "Beautiful Game", "Outcome"];
+    let i = 0;
+    function typeWriter() {
+        const heading = document.getElementById("typewriter");
+        if(heading) {
+            const word = words[i % words.length];
+            heading.innerText = word;
+            i++;
+        }
+    }
+    setInterval(typeWriter, 2500);
+    typeWriter();
+</script>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+fastapi
+uvicorn
+jinja2
+python-multipart
+requests
+python-dotenv
+bcrypt
+itsdangerous
+pandas
+scikit-learn
+joblib
+
+Note: pyodbc is required locally for SQL Server but is often excluded
+
+for cloud deployment if falling back to SQLite.
+
+You can uncomment the next line if your cloud env supports ODBC drivers.
+
+pyodbc

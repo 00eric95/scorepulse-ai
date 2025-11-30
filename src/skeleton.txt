@@ -1,0 +1,15 @@
+ScorePulse_AI/
+├── src/
+│   ├── main.py                <-- Rename "main app entry.py" to this
+│   ├── core/
+│   │   └── inferencemodel.py  <-- Move your "inferencemodel.py" here
+│   ├── templates/
+│   │   ├── base.html          <-- Move "basetemplate.html" here (rename to base.html)
+│   │   ├── home.html          <-- Move "homepage.html" here (rename to home.html)
+│   │   └── predict.html       <-- NEW FILE (See below)
+│   ├── static/
+│   │   └── css/
+│   │       └── style.css      <-- Move "custom styles.css" here (rename to style.css)
+│   ├── models/                <-- Folder containing your 3 .pkl files
+│   └── data/
+│       └── current_team_stats.json
