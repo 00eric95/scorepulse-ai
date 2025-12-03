@@ -9,9 +9,3 @@ itsdangerous
 pandas
 scikit-learn
 joblib
-
-pyodbc is excluded for cloud compatibility as Render uses SQLite fallback
-
-Uncomment the line below only for local development with SQL Server
-
-pyodbc
