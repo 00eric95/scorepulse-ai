@@ -10,6 +10,3 @@ pandas
 scikit-learn
 joblib
 pyodbc
-sqlite3-binary
-
-
