@@ -63,35 +63,97 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 # ==============================================================================
 # --- 3. DATABASE CONFIGURATION ---
 # ==============================================================================
+
+import os
+import sqlite3
+
+# Detect Render environment
+RUNNING_ON_RENDER = os.getenv("RENDER", "false").lower() == "true"
+
+# SQL Server (Local)
 SQL_SERVER = get_env("SQL_SERVER", "DESKTOP-V18R2T9")
 SQL_DATABASE = get_env("SQL_DATABASE", "ScorePulseDB")
 SQL_DRIVER = "{ODBC Driver 17 for SQL Server}"
 USE_WINDOWS_AUTH = True
 
+
+# ⚠️ Only import pyodbc when NOT on Render
+if not RUNNING_ON_RENDER:
+    try:
+        import pyodbc
+    except ImportError:
+        pyodbc = None
+
+
+# -------------------------------
+#   1. SQL SERVER (LOCAL) ONLY
+# -------------------------------
 def get_connection_string():
+    """Only used on LOCAL machine."""
+    if RUNNING_ON_RENDER:
+        return None  # Render will never use this
+
+    if pyodbc is None:
+        print("⚠️ pyodbc missing locally. SQL Server connection disabled.")
+        return None
+
     try:
         available_drivers = pyodbc.drivers()
-        driver_name = "{SQL Server}" # Default legacy driver
-        priorities = ["ODBC Driver 18 for SQL Server", "ODBC Driver 17 for SQL Server", "ODBC Driver 13 for SQL Server", "SQL Server Native Client 11.0"]
-        for p in priorities:
-            if p in available_drivers:
-                driver_name = f"{{{p}}}"
-                break
-        base_str = f'DRIVER={driver_name};SERVER={SQL_SERVER};DATABASE={SQL_DATABASE};'
-        if USE_WINDOWS_AUTH: base_str += 'Trusted_Connection=yes;'
-        else: base_str += 'UID=sa;PWD=your_password;'
-        base_str += 'LoginTimeout=5;TrustServerCertificate=yes;'
-        return base_str
-    except Exception:
-        return f'DRIVER={{SQL Server}};SERVER={SQL_SERVER};DATABASE={SQL_DATABASE};Trusted_Connection=yes;'
+        driver_name = "{SQL Server}"
 
-def get_db_connection():
-    try:
-        conn_str = get_connection_string()
-        return pyodbc.connect(conn_str)
-    except Exception as e:
-        print(f"❌ Database Connection Failed: {e}")
+        priorities = [
+            "ODBC Driver 18 for SQL Server",
+            "ODBC Driver 17 for SQL Server",
+            "ODBC Driver 13 for SQL Server",
+            "SQL Server Native Client 11.0"
+        ]
+
+        for d in priorities:
+            if d in available_drivers:
+                driver_name = f"{{{d}}}"
+                break
+
+        conn_str = (
+            f"DRIVER={driver_name};"
+            f"SERVER={SQL_SERVER};"
+            f"DATABASE={SQL_DATABASE};"
+        )
+
+        if USE_WINDOWS_AUTH:
+            conn_str += "Trusted_Connection=yes;"
+        else:
+            conn_str += "UID=sa;PWD=your_password;"
+
+        conn_str += "LoginTimeout=5;TrustServerCertificate=yes;"
+
+        return conn_str
+
+    except Exception:
         return None
+
+
+# -------------------------------
+#   2. AUTO–DB SWITCH
+# -------------------------------
+def get_db_connection():
+    """Automatically chooses SQLite on Render, SQL Server locally."""
+    
+    # ---------- Render → SQLite ----------
+    if RUNNING_ON_RENDER:
+        return sqlite3.connect("database.sqlite3")
+
+    # ---------- Local → SQL Server ----------
+    conn_str = get_connection_string()
+
+    if conn_str and pyodbc:
+        try:
+            return pyodbc.connect(conn_str)
+        except Exception as e:
+            print(f"⚠️ SQL Server connection failed ({e}). Falling back to SQLite...")
+
+    # ---------- Fallback for local if SQL Server fails ----------
+    return sqlite3.connect("database.sqlite3")
+
 
 def row_to_dict(cursor, row):
     return {col[0]: val for col, val in zip(cursor.description, row)}
